@@ -24,6 +24,7 @@ object LineParser {
             case (Right(_), Left(errors)) => Left(errors)
             case (Right(h), Right(t)) => Right(h :: t)
           }
+        case Nil => Left(List("Se esperaban más campos para parsear el objeto"))
       }
   }
 

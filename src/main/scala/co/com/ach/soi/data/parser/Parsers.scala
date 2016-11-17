@@ -11,10 +11,13 @@ trait TryParser[T] extends Parser[T] {
 
   def parse(s: String): T
 
-  def apply(s: String): Either[String, T] = Try(parse(s)).transform(
-    s => Success(Right(s)),
-    f => Success(Left(s"No logré realizar el parseo para el campo $s"))
-  ).get
+  def apply(s: String): Either[String, T] = {
+    val campoAParsear = s.split(",")
+    Try(parse(campoAParsear(1))).transform(
+      s => Success(Right(s)),
+      f => { Success(Left(s"No logré realizar el parseo para el campo ${campoAParsear(0)}")) }
+    ).get
+  }
 
 }
 object Parsers {
