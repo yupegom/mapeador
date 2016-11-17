@@ -2,8 +2,8 @@
 package co.com.ach.soi.data.mapeador
 
 import org.scalatest.{ EitherValues, Matchers, WordSpecLike }
-import co.com.ach.soi.data.mapper.Parsers._
-import co.com.ach.soi.data.mapper.LineParser
+import co.com.ach.soi.data.parser.Parsers._
+import co.com.ach.soi.data.parser.LineParser
 import org.joda.time.DateTime
 
 class StringParserSpec extends Matchers with WordSpecLike with EitherValues {
