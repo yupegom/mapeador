@@ -3,17 +3,17 @@ package co.com.ach.soi.data.parser
 import shapeless.{ ::, Generic, HList, HNil }
 
 trait LineParser[T] {
-  def apply(s: List[String]): Either[List[String], T]
+  def apply(s: List[ThingToParse]): Either[List[String], T]
 }
 
 object LineParser {
 
   implicit val hnilParser: LineParser[HNil] = new LineParser[HNil] {
-    def apply(s: List[String]): Either[List[String], HNil] = Right(HNil)
+    def apply(s: List[ThingToParse]): Either[List[String], HNil] = Right(HNil)
   }
 
   implicit def hconsLineParser[H: Parser, T <: HList: LineParser]: LineParser[H :: T] = new LineParser[H :: T] {
-    def apply(s: List[String]): Either[List[String], H :: T] =
+    def apply(s: List[ThingToParse]): Either[List[String], H :: T] =
       s match {
         case cell +: rest =>
           val head = implicitly[Parser[H]].apply(cell)
@@ -31,9 +31,9 @@ object LineParser {
   implicit def caseClassParser[A, R <: HList](implicit
     gen: Generic[A] { type Repr = R },
     reprParser: LineParser[R]): LineParser[A] = new LineParser[A] {
-    def apply(s: List[String]): Either[List[String], A] = reprParser.apply(s).right.map(gen.from)
+    def apply(s: List[ThingToParse]): Either[List[String], A] = reprParser.apply(s).right.map(gen.from)
   }
 
-  def apply[A](s: List[String])(implicit parser: LineParser[A]): Either[List[String], A] = parser(s)
+  def apply[A](s: List[ThingToParse])(implicit parser: LineParser[A]): Either[List[String], A] = parser(s)
 
 }
